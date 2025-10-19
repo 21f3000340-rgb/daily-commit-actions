@@ -30,4 +30,5 @@ jobs:
           git commit -m "Daily commit $(date)" || echo "No changes to commit"
           
           # Push to the main branch using your PAT
-          git push https://$PAT_TOKEN@github.com/21f3000340-rgb/daily-commit-action.git HEAD:main
+          git push https://$PAT_TOKEN@github.com/21f3000340-rgb/daily-commit-actions.git HEAD:main
+
