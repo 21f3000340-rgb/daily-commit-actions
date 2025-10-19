@@ -1,14 +1,29 @@
-- name: Add a commit for 21f3000340@ds.study.iitm.ac.in
-  env:
-  PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
-  run: |
-    echo "Daily update: $(date)" >> daily_update.txt
-    git config user.name "GitHub Action"
-    git config user.email "21f3000340@ds.study.iitm.ac.in"
+name: Daily Commit
 
-    git fetch origin main
-    git rebase origin/main || true
+on:
+  schedule:
+    - cron: '0 5 * * *'  # 10:30 IST daily
+  workflow_dispatch:      # Manual trigger
 
-    git add daily_update.txt
-    git commit -m "Daily commit $(date)" || echo "No changes to commit"
-    git push https://$PAT_TOKEN@github.com/21f3000340-rgb/daily-commit-actions.git HEAD:main
+jobs:
+  commit_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Add a commit for 21f3000340@ds.study.iitm.ac.in
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          echo "Daily update: $(date)" >> daily_update.txt
+          git config user.name "GitHub Action"
+          git config user.email "21f3000340@ds.study.iitm.ac.in"
+
+          # Fetch and rebase remote changes
+          git fetch origin main
+          git rebase origin/main || true
+
+          git add daily_update.txt
+          git commit -m "Daily commit $(date)" || echo "No changes to commit"
+          git push https://$PAT_TOKEN@github.com/21f3000340-rgb/daily-commit-actions.git HEAD:main
