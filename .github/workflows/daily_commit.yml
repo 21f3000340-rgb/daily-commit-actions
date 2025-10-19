@@ -3,7 +3,7 @@ name: Daily Commit
 on:
   schedule:
     - cron: '30 10 * * *'  # Runs daily at 10:30 AM UTC
-  workflow_dispatch:
+  workflow_dispatch:      # Allows manual trigger
 
 jobs:
   commit_job:
@@ -16,9 +16,18 @@ jobs:
         env:
           PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
+          # Append current date/time to daily_update.txt
           echo "Daily update: $(date)" >> daily_update.txt
+          
+          # Configure git with username and email
           git config user.name "GitHub Action"
           git config user.email "21f3000340@ds.study.iitm.ac.in"
+          
+          # Stage changes
           git add daily_update.txt
+          
+          # Commit changes (ignore if no changes)
           git commit -m "Daily commit $(date)" || echo "No changes to commit"
+          
+          # Push to the main branch using your PAT
           git push https://$PAT_TOKEN@github.com/21f3000340-rgb/daily-commit-action.git HEAD:main
